@@ -1,0 +1,135 @@
+---
+title: "Documentation: Synthetic Student Performance Analysis"
+author: "Gagandeep Singh"
+date: "19 November 2026"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+<!--
+AI Assistance Declaration: I used ChatGPT (GPT-6, 19 November 2026) for documentation
+planning and Markdown formatting suggestions. Prompts are listed in Appendix.md.
+I will knit this file in RStudio, inspect the rendered document, run the documented
+script, and independently verify the outputs. I am responsible for accuracy and originality.
+-->
+
+# Purpose
+
+The `analysis.R` script demonstrates a basic, reproducible data-analysis workflow using
+a synthetic student-performance dataset. It generates 30 records, inspects the data,
+calculates descriptive summaries, and creates a scatter plot.
+
+The dataset is synthetic and must not be interpreted as real student-performance evidence.
+
+# Inputs
+
+The script does not require an external data file. It creates its input data in R using:
+
+- A fixed random seed (`400`) for reproducibility.
+- 30 synthetic record identifiers.
+- Simulated study hours.
+- Simulated attendance percentages.
+- Simulated assessment scores with random variation.
+
+# Outputs
+
+When the script runs successfully, it:
+
+- Prints the data structure and first six records.
+- Prints missing-value counts and descriptive summaries.
+- Prints the mean study hours, mean score, and correlation.
+- Writes `output/synthetic_student_data.csv`.
+- Writes `output/study_hours_vs_score.png`.
+
+# Dependencies
+
+The script uses base R and the `ggplot2` package.
+
+Install `ggplot2` if it is not already installed:
+
+```{r, eval=FALSE}
+install.packages("ggplot2")
+```
+
+# Script Workflow
+
+## 1. Setup and reproducibility
+
+The script loads `ggplot2` and sets a random seed so that the synthetic records can be
+regenerated consistently.
+
+```{r, eval=FALSE}
+library(ggplot2)
+set.seed(400)
+```
+
+## 2. Data generation
+
+A data frame is created with 30 synthetic observations and four columns.
+
+```{r, eval=FALSE}
+n_students <- 30
+
+student_data <- data.frame(
+  student_id = seq_len(n_students),
+  study_hours = round(runif(n_students, 1, 10), 1),
+  attendance_rate = round(runif(n_students, 60, 100), 1)
+)
+```
+
+## 3. Data inspection and summaries
+
+The script checks the structure, previews records, counts missing values, and calculates
+descriptive summaries. The actual numerical results should be reviewed after running
+`analysis.R`.
+
+```{r, eval=FALSE}
+str(student_data)
+head(student_data)
+colSums(is.na(student_data))
+summary(student_data)
+```
+
+## 4. Visualization
+
+A scatter plot is used to explore the relationship between study hours and assessment
+scores. The fitted line is descriptive and does not establish causation.
+
+```{r, eval=FALSE}
+ggplot(student_data, aes(x = study_hours, y = score)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Study Hours and Assessment Scores",
+    x = "Study hours",
+    y = "Assessment score"
+  ) +
+  theme_minimal()
+```
+
+# How to Run the Script
+
+1. Open the project folder in RStudio.
+2. Install `ggplot2` if necessary.
+3. Set the working directory to the project folder, or open the folder as an RStudio project.
+4. Run `source("analysis.R")` in the R console.
+5. Inspect the console and confirm that the two output files are created.
+
+# Limitations
+
+- All records are simulated; they do not represent actual students.
+- The generated relationship is illustrative and should not be used for decisions.
+- A correlation or fitted line does not prove that study hours cause higher scores.
+- Results may vary if the script or random seed is changed.
+
+# Validation
+
+After running the script, verify that the CSV contains 30 records and the four documented
+columns. Compare the summary values printed by R with an independent calculation in a
+spreadsheet or a second R calculation. Knit this document to HTML and inspect the rendered
+headings, table of contents, and code blocks.
+
+**Do not mark the validation as complete until these checks have been performed locally.**
